@@ -30,6 +30,9 @@
                mysql_query("UPDATE members SET time_logged=now() WHERE id='$id'"); 
                // Print success message here if all went well then exit the script
                $adchk = $row['admin'];   
+
+               // this deals with if the user is an admin or not, if they are they are redirected to the add user page
+               // if the user is not an admin they are simple redirected to the 
                if ($adchk === '1'){
                  header("location: admin.php");
                } else {
@@ -48,9 +51,9 @@
 <!DOCTYPE html>
 <html lang="en">
    <head>
-      <link rel="shortcut icon" href="favicon.ico" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
       <meta charset="utf-8" />
-      <title>ILoveqc</title>
+      <title>ILoveqc Social</title>
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta name="IloveQC Social Login Page" content="" />
       <meta name="antony.magee@gmail.com" content="" />
