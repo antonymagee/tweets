@@ -8,7 +8,7 @@
 
 	
 // Checks if a user is logged in, if they are, continue, if not, drop out to login page and give approiate not logged in error
-if (isset($_SESSION['id'])) {
+//if (isset($_SESSION['id'])) {
 
 	// Check if e-mail has been sent from form, aka new user has attempted ot be added	
 	if ($_POST['email']) {
@@ -23,7 +23,21 @@ if (isset($_SESSION['id'])) {
 	  // filter everything but numbers and letters
 	  $password = $_POST['pass']; 
 
-	  //$password = md5($password);
+	  // Create a 256 bit (64 characters) long random salt
+      // Let's add 'something random' and the username
+      // to the salt as well for added security
+      $salt = hash('sha256', uniqid(mt_rand(), true) . 'something random' . strtolower($password));
+
+      // Prefix the password with the salt
+      $hash = $salt . $password;
+
+      // Hash the salted password a bunch of times
+      for ( $i = 0; $i < 100000; $i ++ ) {
+        $hash = hash('sha256', $hash);
+      }
+
+      // Prefix the hash with the salt so we can find it back later
+      $hash = $salt . $hash;
 	 
 	  // gets the value form the admin radial button
 	  $adminradio = $_POST['admincheck'];
@@ -44,20 +58,20 @@ if (isset($_SESSION['id'])) {
 	  // if a non admin user us added the second part of this statement is fired and adds the user with an admin value of '0'
 	  if ($adminradio == '1')
 	  	{
-	  	$sql = mysql_query("INSERT INTO members VALUES('', '$email', '$password', '', '1')") or die(mysql_error());
+	  	$sql = mysql_query("INSERT INTO members VALUES('', '$email', '$hash', '', '1')") or die(mysql_error());
 	  	} else 
 	  		{
-	  		$sql = mysql_query("INSERT INTO members VALUES('', '$email', '$password', '', '')") or die(mysql_error());
+	  		$sql = mysql_query("INSERT INTO members VALUES('', '$email', '$hash', '', '')") or die(mysql_error());
 	  		}
 	
 	  
 	 
 	}// close if post
 	}// end of first if that checks for duplicate data
-	} else {
-	    header("location: signin.php?l=4");
-	    exit(); 
-	}
+	//} else {
+	//    header("location: signin.php?l=4");
+	//    exit(); 
+	//}
 
 	?>
 <!DOCTYPE html>

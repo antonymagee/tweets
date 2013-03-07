@@ -6,21 +6,41 @@
    if ($_POST['email']) {
      //Connect to the database through our include 
      include_once "connect.php";
+
      $email = stripslashes($_POST['email']);
-     $email = strip_tags($email);
-     $email = mysql_real_escape_string($email);
-     $password = preg_replace("[^A-Za-z0-9]", "", $_POST['password']); // filter everything but numbers and letters
-     //$password = md5($password);
-     // Make query and then register all database data that -
-     // cannot be changed by member into SESSION variables.
-     // Data that you want member to be able to change -
-     // should never be set into a SESSION variable.
-     $sql = mysql_query("SELECT * FROM members WHERE email='$email' AND password='$password'"); 
-     $login_check = mysql_num_rows($sql);
-   
-     if($login_check > 0){ 
-    
-         while($row = mysql_fetch_array($sql))
+     $password = $_POST['password']; // filter everything but numbers and letters
+     
+     $sql = '
+      SELECT
+        `password`
+      FROM `members`
+        WHERE
+          `email` = "' . mysql_real_escape_string($email) . '"
+      LIMIT 1
+      ;';
+
+    $r = mysql_fetch_assoc(mysql_query($sql));
+
+    // The first 64 characters of the hash is the salt
+    $salt = substr($r['password'], 0, 64);
+
+    $hash = $salt . $password;
+
+    // Hash the password just like before
+    for ( $i = 0; $i < 100000; $i ++ ) {
+      $hash = hash('sha256', $hash);
+    }
+
+    $hash = $salt . $hash;
+
+    //echo $hash;
+    //echo $r['password'];
+
+    if ( $hash == $r['password'] ) {
+
+      $addDetails = mysql_query("SELECT * FROM members WHERE email='$email' "); 
+
+      while($row = mysql_fetch_array($addDetails))
              { 
                // Get member ID into a session variable
                $id = $row["id"];   
@@ -41,11 +61,14 @@
                }
                
              } // close while
-     } else {
-     // Print login failure message to the user and link them back to your login page
-     header("location: signin.php?l=2");
-     exit();
-     }
+
+      // Ok!
+    } else {
+      // Print login failure message to the user and link them back to your login page
+      header("location: signin.php?l=2");
+    }
+
+
    }// close if post
    ?>
 <!DOCTYPE html>

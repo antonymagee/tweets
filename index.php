@@ -2,7 +2,7 @@
 /* 
    Created By Antony Magee @ antony.magee@gmail.com 
    -----------------------January 2013 ----------------------- 
-*/
+   */
     session_start();
     
     
@@ -62,7 +62,7 @@
 <html>
     <head>
         <link rel="shortcut icon" href="img/favicon.ico" />
-        <title>ILoveqc Social</title>
+        <title>ILoveqc</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <!-- Bootstrap -->
         <link href="css/bootstrap.css" rel="stylesheet" media="screen" />
@@ -81,7 +81,7 @@
                                 <button class="btn" type="submit" name="submit">Search</button>
                             </div>
                             <div class="btn-group">
-                                <a href="#myModal" role="button" class="btn" data-toggle="modal">Get RSS URL</a>
+                                <a class="btn btn-warning" href="clear.php" type="button">Clear tweets</a>
                             </div>
                             <div class="btn-group">
                                 <a class="btn btn-warning" href="logout.php" type="button">Logout</a>
@@ -100,15 +100,7 @@
                 <h3 id="myModalLabel">RSS URL for Quartz Composer</h3>
               </div>
               <div class="modal-body">
-                <?php 
-                        include 'connect.php'; 
-                            $idmem = $_SESSION['id'];
-                            $sql = mysql_query("SELECT uni FROM members WHERE id = $idmem")or die(mysql_error());
-                            //$val = mysql('sql');
-                            $unqadd = mysql_fetch_array($sql); 
-                            //$addition = $unqadd['uni'];
-                            $addition = $_SESSION['id'];
-                        ?>
+ 
 
                     <div class="well well-large">
                         
@@ -169,7 +161,7 @@
                           echo "<td>" . $row['text'] . "</td>";
                     
                           if ($row['approved']==0 ){
-                            echo "<td><a class='btn btn-small' href='approval.php?id=" .$row['id']. "'><i class='icon-thumbs-up'></i></a></td>";
+                            echo "<td><a class='btn btn-success' href='approval.php?id=" .$row['id']. "'><i class='icon-thumbs-up'></i></a></td>";
                             } else {
                             echo "<td><a class='btn btn-danger' href='remove.php?id=" .$row['id']. "'><i class='icon-thumbs-down'></i></a></td>";   
                             }   

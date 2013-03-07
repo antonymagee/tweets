@@ -22,7 +22,7 @@ $rssfeed .= '<language>en-us</language>';
 $rssfeed .= '<copyright>Copyright (C) 2013 iloveqc.org</copyright>';
 
     // Grabs the approved tweets from the database that match the id of the user
-    $result = mysql_query("SELECT * FROM storedtweets WHERE approved = 1 AND memid = '$hash'") or die ("Could not execute query");
+    $result = mysql_query("SELECT * FROM storedtweets WHERE approved = 0 AND memid = '$hash'") or die ("Could not execute query");
 
 
     // runs them through a while loop to display each tweet
