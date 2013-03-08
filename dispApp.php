@@ -29,12 +29,22 @@ $rssfeed .= '<copyright>Copyright (C) 2013 iloveqc.org</copyright>';
     while($row = mysql_fetch_array($result)) {
         extract($row);
 
+        $img = strstr($row['img_url'], 'insta');
+        $expInsta = explode("/", $img);
+                    
+        $twitpic = strstr($row['img_url'], 'twitpic');
+        $expTwitpic = explode("/", $twitpic);
  
         $rssfeed .= '<item>';
         $rssfeed .= '<title>' . $user . '</title>';
         $rssfeed .= '<description>' . $text . '</description>';
-        $rssfeed .= '<link>' . $linkimg_url . '</link>';
-        $rssfeed .= '<pubDate>' . date("D, d M Y H:i:s O", strtotime($time_sent)) . '</pubDate>';
+        if ($img != FALSE) {
+                            $rssfeed .= "<link>http://instagr.am/p/" .$expInsta[2]. "/media/?size=l</link>";
+                          }   elseif ($twitpic != FALSE){
+                            $rssfeed .= "<link>http://twitpic.com/show/full/" .$expTwitpic[1]. "</link>"; 
+                          }   else {
+                          }
+        //$rssfeed .= '<pubDate>' . date("D, d M Y H:i:s O", strtotime($time_sent)) . '</pubDate>';
         $rssfeed .= '</item>';
     }
  
